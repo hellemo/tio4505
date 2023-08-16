@@ -414,7 +414,7 @@ function print_typetree(T)
 	vi = io = IOBuffer(UInt8[], read=true, write=true, maxsize=10_000)
 	print_tree(vi,T)
 	s = String(take!(vi))
-	Text(s)
+	Base.Text(s)
 end;
 
 # ╔═╡ 7365bbe2-6fd6-11eb-0f82-2b349f5891be
@@ -2975,6 +2975,6 @@ version = "3.5.0+0"
 # ╟─50539e30-6fd3-11eb-13bd-27772c91bf9a
 # ╟─6bf15128-6fd3-11eb-33f3-3b632ab2fc05
 # ╟─6d87ba98-6fd3-11eb-169c-01fa2ea0ee14
-# ╟─80caab6a-6fd3-11eb-2496-292e705d6df0
+# ╠═80caab6a-6fd3-11eb-2496-292e705d6df0
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
