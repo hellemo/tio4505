@@ -4,120 +4,170 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 3b025820-4835-11ee-3616-b119ad546a8b
-using JuMP
+# ╔═╡ 51e535c0-4b10-11ee-38a8-8f8a036a753b
+using JuMP, HiGHS, Plots
 
-# ╔═╡ 8707b870-f94d-4280-9091-7eb839a1171c
-using HiGHS
+# ╔═╡ fa1e89e4-cbd1-4722-b2f8-179b299a94b5
+html"<button onclick=present()>Present</button>"
 
-# ╔═╡ 93288539-e7f4-4eda-8c0b-9b6dc6660d3b
-using Plots
+# ╔═╡ f9844161-25aa-4eec-83ee-0b6ce87a4a1f
+md"# Benders' decomposition"
 
-# ╔═╡ 2493a6fb-8886-4958-8541-8dbc1afe6868
-md"# Algebraic Modelling Languages"
+# ╔═╡ 35fe524a-12b5-48ab-aa53-df53d1ff9e73
+md"Based on: <https://jump.dev/JuMP.jl/stable/tutorials/algorithms/benders_decomposition/>"
 
-# ╔═╡ 2f5f5db6-9ed7-464d-baed-188ed198db98
-md"
-- JuMP is an __algebraic modelling language__ written in Julia
-- Other examples: GAMS, AMPL, Mosel, Pyomo
-- Consists of two main parts
-  - A __domain specific language__ to write down problems in algebraic form
-  - A __converter__ to transform them into a standard form supported by the solver(s)
-"
+# ╔═╡ d427c33d-b932-4b6a-86d2-267e9ddeb996
+md"Iterative procedure to solve problems on the form"
 
-# ╔═╡ 366ee39e-e4e6-43d4-9421-ba9f729ab3cd
-md"# JuMP"
-
-# ╔═╡ e4ee381d-69c0-4f93-9410-a32b9c522ae3
-md" 
-- Development starting at MIT in 2013 
-- Still going strong with an active community of contributors
-- Supports a wide range of open-source and commercial solvers
-  - Linear, mixed-integer, second-order conic, semidefinite and nonlinear programming
-- Extensive documentation with good tutorials 
-  - <https://jump.dev/JuMP.jl/stable/>
-- User friendly, solver independent, easy to embed, speed
-- Easy installation of solvers
-"
-
-# ╔═╡ 5505a818-d49f-449f-bd9a-811c7f951747
-md"# Basic usage"
-
-# ╔═╡ d507c661-46cb-491d-a065-13f810a60b89
-m = Model()
-
-# ╔═╡ 9215ad4f-f3a6-460a-aa84-f31b3c90d030
-@variable(m, x[1:2] ≥ 0)
-
-# ╔═╡ b55f6a65-56de-4cfb-84ee-68e36a7185bc
-@constraint(m, x[1] + 2x[2] ≤ 4)
-
-# ╔═╡ 15dc22ea-4710-41af-9614-53601e1ad40a
-@constraint(m, x[1] - 3x[2] ≤ 2)
-
-# ╔═╡ d397e352-2965-4255-b5e5-5599c34a43a0
-@objective(m, Max, x[1] - x[2])
-
-# ╔═╡ 1f83f8cf-0a30-4c3d-93c2-a245124a03ef
-m
-
-# ╔═╡ 44eb42d7-d930-4f26-bf87-49339b3bd2a3
-set_optimizer(m, HiGHS.Optimizer)
-
-# ╔═╡ d63c0e8f-71f5-4a53-87a7-ef082ca8b3d3
-m
-
-# ╔═╡ fab8650f-ebe2-4a13-84a4-c7cf1a3fb4db
-optimize!(m)
-
-# ╔═╡ 05e37869-0aaf-4c49-9c76-a0b43a6401ce
-m
-
-# ╔═╡ 1a7e52dd-0116-4184-96cd-1c06cc1657e8
-value.(x)
-
-# ╔═╡ 7c3c8cec-0b60-4d97-af7c-b21fb9e1aed5
-objective_value(m)
-
-# ╔═╡ 7f591f8e-c6c4-4efc-b8a6-b7a9f5702b40
-latex_formulation(m)
-
-# ╔═╡ 0ccbc2db-a4b3-4e6d-b8aa-2f3e244db9d1
-md"# Knapsack problem"
-
-# ╔═╡ 6dbee00b-9ce7-4c4c-8d6f-7e0b5f794feb
+# ╔═╡ d27e60aa-3472-4b49-889d-711f57d1b1c1
 md"$$
-\begin{align} \max & \sum_{i=1}^n c_i x_i \\
-   \text{s.t.} &\sum_{i=1}^n w_i x_i \le b\\
-	&x_i \in \{0,1\} \text{ for } i = 1,\dots,n
-\end{align}$$"
+\begin{aligned}
+\text{min}        \ & c_1^\top x+c_2^\top y   \\
+\text{subject to} \ & A_1 x+ A_2 y \le b      \\
+                     & x \ge 0                 \\
+                     & y \ge 0                 \\
+                     & x \in \mathbb{Z}^n
+\end{aligned}$$"
 
-# ╔═╡ 70d968b4-a6ff-42c8-b068-f68514cfecc2
-function knapsack(c, w, b)
-	n = length(c)
-	model = Model(HiGHS.Optimizer)
-    set_silent(model)
-   	@variable(model, x[1:n], Bin)
-   	@objective(model, Max, sum(c[i] * x[i] for i = 1:n))
-   	@constraint(model, sum(w[i] * x[i] for i = 1:n) <= b)
-   	optimize!(model)
-   	return objective_value(model), value.(x)
-end
+# ╔═╡ bc3b08dd-a85e-4221-b4a3-43c2cbc4e8ee
+md"If we know a feasible solution for $x$, we can find a solution for $y$ by solving"
 
-# ╔═╡ 8b2c82a1-337e-4570-80b8-c97242fd62ab
+# ╔═╡ fe36a2a6-e425-4d37-bc8c-c73f51f4c352
+md"```math 
+\begin{aligned}
+V_2(x) = & \text{ min}          \ & c_2^\top y                        \\
+          & \text{ subject to}   \ & A_2 y \le b - A_1 x & \quad [\pi] \\
+          &                       & y \ge 0
+\end{aligned}
+```"
+
+# ╔═╡ dd11b19e-3b32-4fbb-bc41-3ad7da45a27a
+md"Using this in our original problem gives" 
+
+# ╔═╡ f16ea453-982c-4a80-8794-087db5558384
+md"
+```math
+\begin{aligned}
+\text{min}        \ & c_1^\top x + \textcolor{blue}{V_2(x)} \\
+\text{subject to} \ & x \ge 0             \\
+                     & x \in \mathbb{Z}^n
+\end{aligned}
+```
+"
+
+# ╔═╡ 904d5e3c-db9e-46ed-93b9-bf5f1380abc6
+md"Benders decomposition is an iterative technique that replaces $V_2(x)$
+ with a new decision variable $θ$
+, and approximates it from below using cuts"
+
+# ╔═╡ 3631c46b-841b-4d49-a1b6-e57c56e23dff
+md"```math
+\begin{aligned}
+V_1^K = & \text{min}         \ & c_1^\top x + \theta  \\
+         &  \text{subject to} \ & x \ge 0              \\
+         &                    \ & x \in \mathbb{Z}^n   \\
+         &                    \ & \theta \ge M         \\
+         &                    \ & \theta \ge V_2(x_k) + \pi_k^\top(x - x_k) & \quad \forall k = 1,\ldots,K.
+ \end{aligned}
+```"
+
+# ╔═╡ fcd18414-c5dd-4b0e-9cbc-37fd4d35894f
+md"# First stage problem"
+
+# ╔═╡ 7530c6e4-b125-4afc-969e-5242b2c01a66
+md"Input data"
+
+# ╔═╡ f93ef944-9fc4-49a6-bfff-3878035ef83e
 begin
-	c = [2, 4, 4, 3, 5, 1]
-	w = [1, 3, 2, 2, 4, 2]
+	c_1 = [1, 4]
+	c_2 = [2, 3]
+	dim_x = length(c_1)
+	dim_y = length(c_2)
+	b = [-2; -3]
+	A_1 = [1 -3; -1 -3]
+	A_2 = [1 -2; -1 -1]
+	M = -1000
+end;
+
+# ╔═╡ 62cf8b93-21fb-4967-bec8-036f110e48be
+begin
+	model = Model(HiGHS.Optimizer)
+	set_silent(model)
+	@variable(model, x[1:dim_x] >= 0, Int)
+	@variable(model, θ >= M)
+	@objective(model, Min, c_1' * x + θ)
+	latex_formulation(model)
 end
 
-# ╔═╡ 286b8914-7401-4410-b65e-7cb1a968ce37
-cap = collect(1:14)
+# ╔═╡ ed7a55e7-dbca-493b-90c6-88dfcf2a7b30
+md"Solving the subproblem"
 
-# ╔═╡ 2937bf13-8c15-49c3-8c45-5bc19ac36774
-opt_vals = [knapsack(c, w, b) for b in cap];
+# ╔═╡ b2843f44-a4af-46a6-8aae-5579cf0d4bf9
+function solve_subproblem(x)
+    sub = Model(HiGHS.Optimizer)
+	set_silent(sub)
+    @variable(sub, y[1:dim_y] >= 0)
+    con = @constraint(sub, A_2 * y .<= b - A_1 * x)
+    @objective(sub, Min, c_2' * y)
+    optimize!(sub)
+    @assert termination_status(sub) == OPTIMAL
+    return (obj = objective_value(sub), y = value.(y), π = dual.(con))
+end
 
-# ╔═╡ 804030f2-5507-431d-9f4d-f0ac52a38c36
-scatter(cap, [obj for (obj, vals) in opt_vals])
+# ╔═╡ 8004ee31-36c2-4540-92f0-446313466724
+md"Control parameters"
+
+# ╔═╡ ab8c1e3c-44e8-45b1-b27a-8070a0465578
+begin
+	MAXIMUM_ITERATIONS = 100
+	ABSOLUTE_OPTIMALITY_GAP = 1e-6
+end;
+
+# ╔═╡ 28df6ec0-6958-4875-8129-a3bbbafb93b0
+md"Iterative method"
+
+# ╔═╡ fa848c51-02d2-4bfb-bc3b-0eb18c47b94e
+begin
+	upper = []
+	lower = []
+	for k in 1:MAXIMUM_ITERATIONS
+		optimize!(model)
+    	lower_bound = objective_value(model)
+    	x_k = value.(x)
+    	ret = solve_subproblem(x_k)
+    	upper_bound = c_1' * x_k + ret.obj
+    	gap = (upper_bound - lower_bound) / upper_bound
+		push!(upper, upper_bound)
+		push!(lower, lower_bound)
+    	if gap < ABSOLUTE_OPTIMALITY_GAP
+			println("Terminating with the optimal solution")
+        	break
+    	end
+    	cut = @constraint(model, θ >= ret.obj + -ret.π' * A_1 * (x .- x_k))
+		println("Adding the cut $(cut)")
+	end
+end
+
+# ╔═╡ 2b8795dd-fe7c-4420-8289-f1fcdc5a3171
+begin
+	plot(upper; label="upper bound")
+	plot!(lower; color="green", label="lower_bound")
+end
+
+# ╔═╡ a80e2d1a-6db6-4d8a-a790-1969851c3f87
+latex_formulation(model)
+
+# ╔═╡ 545556c4-5da3-4ba7-9395-40786c375bbf
+begin
+	optimize!(model)
+	x_optimal = value.(x)
+end
+
+# ╔═╡ e818ef08-1bed-47bf-b960-faf7e10a0fc3
+begin
+	optimal_ret = solve_subproblem(x_optimal)
+	y_optimal = optimal_ret.y
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -128,7 +178,7 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 
 [compat]
 HiGHS = "~1.5.2"
-JuMP = "~1.14.0"
+JuMP = "~1.14.1"
 Plots = "~1.39.0"
 """
 
@@ -138,7 +188,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.3"
 manifest_format = "2.0"
-project_hash = "6f9b8f2dd882b11a0afe3c33ce248d1022b58104"
+project_hash = "9b582c0565a632e8c32f1a846e32f8f13118d7a5"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -458,9 +508,9 @@ version = "2.1.91+0"
 
 [[deps.JuMP]]
 deps = ["LinearAlgebra", "MathOptInterface", "MutableArithmetics", "OrderedCollections", "Printf", "SnoopPrecompile", "SparseArrays"]
-git-tree-sha1 = "f09279ee9b4f80aaacaf2ac801429dd0c16c57ed"
+git-tree-sha1 = "4db659ae33c7d26f957f302c0561ad135b7249ee"
 uuid = "4076af6c-e467-56ae-b986-b466b2749572"
-version = "1.14.0"
+version = "1.14.1"
 
     [deps.JuMP.extensions]
     JuMPDimensionalDataExt = "DimensionalData"
@@ -558,10 +608,10 @@ uuid = "7add5ba3-2f88-524e-9cd5-f83b8a55f7b8"
 version = "1.42.0+0"
 
 [[deps.Libiconv_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "c7cb1f5d892775ba13767a87c7ada0b980ea0a71"
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "f9557a255370125b405568f9767d6d195822a175"
 uuid = "94ce4f54-9a6c-5748-9c1c-f9c7231a4531"
-version = "1.16.1+2"
+version = "1.17.0+0"
 
 [[deps.Libmount_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1227,33 +1277,31 @@ version = "1.4.1+0"
 """
 
 # ╔═╡ Cell order:
-# ╟─2493a6fb-8886-4958-8541-8dbc1afe6868
-# ╟─2f5f5db6-9ed7-464d-baed-188ed198db98
-# ╟─366ee39e-e4e6-43d4-9421-ba9f729ab3cd
-# ╟─e4ee381d-69c0-4f93-9410-a32b9c522ae3
-# ╟─5505a818-d49f-449f-bd9a-811c7f951747
-# ╠═3b025820-4835-11ee-3616-b119ad546a8b
-# ╠═d507c661-46cb-491d-a065-13f810a60b89
-# ╠═9215ad4f-f3a6-460a-aa84-f31b3c90d030
-# ╠═b55f6a65-56de-4cfb-84ee-68e36a7185bc
-# ╠═15dc22ea-4710-41af-9614-53601e1ad40a
-# ╠═d397e352-2965-4255-b5e5-5599c34a43a0
-# ╠═1f83f8cf-0a30-4c3d-93c2-a245124a03ef
-# ╠═8707b870-f94d-4280-9091-7eb839a1171c
-# ╠═44eb42d7-d930-4f26-bf87-49339b3bd2a3
-# ╠═d63c0e8f-71f5-4a53-87a7-ef082ca8b3d3
-# ╠═fab8650f-ebe2-4a13-84a4-c7cf1a3fb4db
-# ╠═05e37869-0aaf-4c49-9c76-a0b43a6401ce
-# ╠═1a7e52dd-0116-4184-96cd-1c06cc1657e8
-# ╠═7c3c8cec-0b60-4d97-af7c-b21fb9e1aed5
-# ╠═7f591f8e-c6c4-4efc-b8a6-b7a9f5702b40
-# ╟─0ccbc2db-a4b3-4e6d-b8aa-2f3e244db9d1
-# ╟─6dbee00b-9ce7-4c4c-8d6f-7e0b5f794feb
-# ╠═70d968b4-a6ff-42c8-b068-f68514cfecc2
-# ╠═8b2c82a1-337e-4570-80b8-c97242fd62ab
-# ╠═286b8914-7401-4410-b65e-7cb1a968ce37
-# ╠═2937bf13-8c15-49c3-8c45-5bc19ac36774
-# ╠═93288539-e7f4-4eda-8c0b-9b6dc6660d3b
-# ╠═804030f2-5507-431d-9f4d-f0ac52a38c36
+# ╟─fa1e89e4-cbd1-4722-b2f8-179b299a94b5
+# ╠═51e535c0-4b10-11ee-38a8-8f8a036a753b
+# ╟─f9844161-25aa-4eec-83ee-0b6ce87a4a1f
+# ╟─35fe524a-12b5-48ab-aa53-df53d1ff9e73
+# ╟─d427c33d-b932-4b6a-86d2-267e9ddeb996
+# ╟─d27e60aa-3472-4b49-889d-711f57d1b1c1
+# ╟─bc3b08dd-a85e-4221-b4a3-43c2cbc4e8ee
+# ╟─fe36a2a6-e425-4d37-bc8c-c73f51f4c352
+# ╟─dd11b19e-3b32-4fbb-bc41-3ad7da45a27a
+# ╟─f16ea453-982c-4a80-8794-087db5558384
+# ╟─904d5e3c-db9e-46ed-93b9-bf5f1380abc6
+# ╟─3631c46b-841b-4d49-a1b6-e57c56e23dff
+# ╟─fcd18414-c5dd-4b0e-9cbc-37fd4d35894f
+# ╟─7530c6e4-b125-4afc-969e-5242b2c01a66
+# ╠═f93ef944-9fc4-49a6-bfff-3878035ef83e
+# ╠═62cf8b93-21fb-4967-bec8-036f110e48be
+# ╟─ed7a55e7-dbca-493b-90c6-88dfcf2a7b30
+# ╠═b2843f44-a4af-46a6-8aae-5579cf0d4bf9
+# ╟─8004ee31-36c2-4540-92f0-446313466724
+# ╠═ab8c1e3c-44e8-45b1-b27a-8070a0465578
+# ╟─28df6ec0-6958-4875-8129-a3bbbafb93b0
+# ╠═fa848c51-02d2-4bfb-bc3b-0eb18c47b94e
+# ╠═2b8795dd-fe7c-4420-8289-f1fcdc5a3171
+# ╠═a80e2d1a-6db6-4d8a-a790-1969851c3f87
+# ╠═545556c4-5da3-4ba7-9395-40786c375bbf
+# ╠═e818ef08-1bed-47bf-b960-faf7e10a0fc3
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
