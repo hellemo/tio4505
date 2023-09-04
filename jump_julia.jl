@@ -13,6 +13,9 @@ using HiGHS
 # ╔═╡ 93288539-e7f4-4eda-8c0b-9b6dc6660d3b
 using Plots
 
+# ╔═╡ 00ebfa17-c53d-4806-a343-cad16c14b77d
+html"<button onclick=present()>Present</button>"
+
 # ╔═╡ 2493a6fb-8886-4958-8541-8dbc1afe6868
 md"# Algebraic Modelling Languages"
 
@@ -36,7 +39,7 @@ md"
   - Linear, mixed-integer, second-order conic, semidefinite and nonlinear programming
 - Extensive documentation with good tutorials 
   - <https://jump.dev/JuMP.jl/stable/>
-- User friendly, solver independent, easy to embed, speed
+- __User friendly__, __solver independent__, __easy to embed__, __great speed__
 - Easy installation of solvers
 "
 
@@ -111,13 +114,45 @@ begin
 end
 
 # ╔═╡ 286b8914-7401-4410-b65e-7cb1a968ce37
-cap = collect(1:14)
+cap = collect(1:14);
 
 # ╔═╡ 2937bf13-8c15-49c3-8c45-5bc19ac36774
 opt_vals = [knapsack(c, w, b) for b in cap];
 
 # ╔═╡ 804030f2-5507-431d-9f4d-f0ac52a38c36
 scatter(cap, [obj for (obj, vals) in opt_vals])
+
+# ╔═╡ dfcec4a2-3ed7-4c12-9bd6-44a95d354ee7
+md"# Solvers"
+
+# ╔═╡ ab09092d-3beb-449c-b027-4af9204e1af2
+md"
+- LP/MIP etc. solvers:
+  - Commercial: Gurobi, Xpress, CPLEX, COPT
+  - Open source: HiGHS, GLPK, Cbc, SCIP, Clarabel
+- Non-linear solvers:
+  - Commercial: KNITRO, BARON
+  - Open-source: Ipopt
+- Complementarity:
+  - PathSolver
+
+Full list at <https://jump.dev/JuMP.jl/stable/packages/solvers/>
+"
+
+# ╔═╡ aa9e62f5-b1f6-4acc-aa4e-4820d0243d07
+md"# Extensions"
+
+# ╔═╡ 535de4b7-28f5-4b3d-8136-324be8c67f36
+md"
+- Multiobjective optimization
+- Complementarity problems
+- Stochastic dual dynamic programming
+  - <https://odow.github.io/SDDP.jl/stable/>
+- Column generation (branch-price-cut)
+  - <https://github.com/atoptima/Coluna.jl>
+- Infinite dimensional optimization
+  - <https://infiniteopt.github.io/InfiniteOpt.jl/stable/>
+"
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1227,6 +1262,7 @@ version = "1.4.1+0"
 """
 
 # ╔═╡ Cell order:
+# ╟─00ebfa17-c53d-4806-a343-cad16c14b77d
 # ╟─2493a6fb-8886-4958-8541-8dbc1afe6868
 # ╟─2f5f5db6-9ed7-464d-baed-188ed198db98
 # ╟─366ee39e-e4e6-43d4-9421-ba9f729ab3cd
@@ -1255,5 +1291,9 @@ version = "1.4.1+0"
 # ╠═2937bf13-8c15-49c3-8c45-5bc19ac36774
 # ╠═93288539-e7f4-4eda-8c0b-9b6dc6660d3b
 # ╠═804030f2-5507-431d-9f4d-f0ac52a38c36
+# ╟─dfcec4a2-3ed7-4c12-9bd6-44a95d354ee7
+# ╟─ab09092d-3beb-449c-b027-4af9204e1af2
+# ╟─aa9e62f5-b1f6-4acc-aa4e-4820d0243d07
+# ╟─535de4b7-28f5-4b3d-8136-324be8c67f36
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
