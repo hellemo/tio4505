@@ -47,7 +47,7 @@ html"""<img src="https://julialang.org/assets/images/benchmarks.svg" width=800 /
 # ╔═╡ 80973e30-6734-11eb-3562-0fd72f03c79a
 md"# Matrix Multiplication | Octavian.jl
 [https://github.com/JuliaLinearAlgebra/Octavian.jl/issues/24#issuecomment-766243445](https://github.com/JuliaLinearAlgebra/Octavian.jl/issues/24#issuecomment-766243445)
-![](https://user-images.githubusercontent.com/29157027/105636255-ca40a580-5e24-11eb-80a3-6ea280114e91.png)
+![](https://raw.githubusercontent.com/JuliaLinearAlgebra/Octavian.jl/master/docs/src/assets/bench10980xe.svg)
 "
 
 # ╔═╡ 14818ab2-fabe-11ea-20e0-2101e6cd78b8
@@ -276,7 +276,7 @@ ShortCodes = "~0.3.5"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.0-DEV"
+julia_version = "1.10.0-beta2"
 manifest_format = "2.0"
 project_hash = "25da01d11f7ec4f8f713807662cb4ee94f470374"
 
@@ -492,7 +492,7 @@ version = "2.5.10"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.11.0"
+version = "1.10.0"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
@@ -630,19 +630,19 @@ version = "17.4.0+2"
 """
 
 # ╔═╡ Cell order:
-# ╟─e2d9d90e-faba-11ea-2f70-cfe077bf0b02
+# ╠═e2d9d90e-faba-11ea-2f70-cfe077bf0b02
 # ╠═fb317baa-1d62-43a0-bdf3-f1d3ae1c45a2
 # ╠═4a3c9c50-ad10-4646-88c7-d23ecf539f88
 # ╠═c94ad35a-fad1-11ea-36b2-9f7221bc2e42
 # ╠═1fa8b43a-8c4f-424c-855d-f6d0de648775
-# ╟─f65374ae-faba-11ea-1951-a9729c1f1023
-# ╟─bf2faff8-faba-11ea-0076-d32d5d26452d
-# ╟─8312c020-fabb-11ea-0237-43c8b54130b2
-# ╟─9f8cd3f8-90c5-11eb-393f-6de735e6d9c7
+# ╠═f65374ae-faba-11ea-1951-a9729c1f1023
+# ╠═bf2faff8-faba-11ea-0076-d32d5d26452d
+# ╠═8312c020-fabb-11ea-0237-43c8b54130b2
+# ╠═9f8cd3f8-90c5-11eb-393f-6de735e6d9c7
 # ╟─d6fbd082-90c5-11eb-01b5-db792cb83005
-# ╟─311abe34-fabc-11ea-3f0b-51e3c44b3efb
-# ╟─451707e4-fabc-11ea-399f-a3123e4fefa2
-# ╟─80973e30-6734-11eb-3562-0fd72f03c79a
+# ╠═311abe34-fabc-11ea-3f0b-51e3c44b3efb
+# ╠═451707e4-fabc-11ea-399f-a3123e4fefa2
+# ╠═80973e30-6734-11eb-3562-0fd72f03c79a
 # ╟─14818ab2-fabe-11ea-20e0-2101e6cd78b8
 # ╟─1d0ee116-fabe-11ea-298e-4f98ecf41f06
 # ╟─a948132a-fabc-11ea-31b2-01e38085b522
@@ -660,7 +660,7 @@ version = "17.4.0+2"
 # ╟─57bd353d-2cf3-4b52-aa99-4d449038c53f
 # ╟─907226d4-fd00-465b-98c2-9c64b4343249
 # ╟─5352e87d-16d6-42ef-a5e1-33b65ef90d56
-# ╟─16a16598-262f-47fa-884a-0681770b611a
+# ╠═16a16598-262f-47fa-884a-0681770b611a
 # ╠═293dd452-7d3a-471d-8f90-a356c12dd56a
 # ╠═d89dfe68-90f7-4e7b-b4ec-3f633cb436d9
 # ╟─6735f61d-aa22-473c-b767-1cd67683d0f7
