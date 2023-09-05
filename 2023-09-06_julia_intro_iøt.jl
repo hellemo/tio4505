@@ -56,6 +56,9 @@ YouTube("kc9HwsxE1OY",3,47) # The Unreasonable Effectiveness of Multiple Dispatc
 # ╔═╡ cb1685fa-9813-4b00-9e03-40ffd20a7cd8
 2+2 # Calculation
 
+# ╔═╡ 8ff39756-b5b1-4471-ac6f-434396a7b1bb
+typeof(f(1))
+
 # ╔═╡ c5cd45c5-6acc-448e-889f-6966aeccd880
 typeof.([1, 1.0, "Hei", 1//2, π])
 
@@ -63,10 +66,13 @@ typeof.([1, 1.0, "Hei", 1//2, π])
 [RGB(r, 0, 0) for r ∈ 0:0.1:1]
 
 # ╔═╡ 5689831e-7620-428e-8d84-31dec4a9c4a4
-@bind gran PlutoUI.Scrubbable(0.3)
+@bind gran PlutoUI.Scrubbable(0.5)
 
 # ╔═╡ a175b64f-ca73-4a22-862c-12f9bff88ec4
 [RGB(r, 0, b) for r ∈ 0:gran:1, b ∈ 0:gran:1]
+
+# ╔═╡ 6c668d28-5253-4d90-a589-f9f435e164b4
+gran
 
 # ╔═╡ 01ed0700-fde2-4b09-ac66-0b06bab74fe9
 # f(x::String) = "Hello, $x"
@@ -174,6 +180,11 @@ f(1.0)
 
 # ╔═╡ 3063902d-e5f3-4317-8e9f-c134286202dc
 f(1)
+
+# ╔═╡ 04aded3e-fda8-4be3-aec5-d6f9c782ecf7
+with_terminal() do
+	 @code_llvm dump_module=false f(1)
+end
 
 # ╔═╡ b1900ac8-8da0-4ded-9f51-240d7aaabbd6
 f("NTNU")
@@ -1308,12 +1319,15 @@ version = "17.4.0+2"
 # ╠═50b5ec1c-f335-4ff7-8b17-bd4938c450f0
 # ╠═e9461298-e232-4649-bbfb-dbf0206fee0e
 # ╠═3063902d-e5f3-4317-8e9f-c134286202dc
+# ╠═8ff39756-b5b1-4471-ac6f-434396a7b1bb
+# ╠═04aded3e-fda8-4be3-aec5-d6f9c782ecf7
 # ╠═c5cd45c5-6acc-448e-889f-6966aeccd880
 # ╠═7d853f9d-ed61-4829-8585-69f853231b5f
 # ╠═e18095f0-a0e3-4014-9a56-0448ebe2d2ac
 # ╠═9dbf7f36-46d6-4ad4-8cbf-6ce438eb04a0
 # ╠═5689831e-7620-428e-8d84-31dec4a9c4a4
 # ╠═a175b64f-ca73-4a22-862c-12f9bff88ec4
+# ╠═6c668d28-5253-4d90-a589-f9f435e164b4
 # ╠═b1900ac8-8da0-4ded-9f51-240d7aaabbd6
 # ╠═01ed0700-fde2-4b09-ac66-0b06bab74fe9
 # ╠═b0c4fb7c-71a4-4b64-a82d-412cef77ee25

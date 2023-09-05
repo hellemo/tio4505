@@ -15,7 +15,7 @@ macro bind(def, element)
 end
 
 # ╔═╡ 015aa792-7444-4369-b1e6-dd46202e0ded
-import Pkg; Pkg.activate(@__DIR__) # Needs IntervalArithmetic v0.20
+import Pkg; Pkg.activate(@__DIR__) # Needs IntervalArithmetic v0.20 (breaks in v0.21)
 
 # ╔═╡ 239a8a92-784c-11eb-34e8-e9a85b781eb9
 using PlutoUI, ShortCodes
