@@ -135,6 +135,8 @@ md"
   - Open-source: Ipopt
 - Complementarity:
   - PathSolver
+- Solvers written entirely in Julia
+  - Clarabel, Cosmo, Hypatia
 
 Full list at <https://jump.dev/JuMP.jl/stable/packages/solvers/>
 "
