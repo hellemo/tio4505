@@ -41,6 +41,12 @@ QRCode("https://github.com/JuliaLang/juliaup", version=4, width=4)
 # ╔═╡ f442130c-5917-4674-a025-faeb06d8124c
 html"""<img src="https://julialang.org/assets/images/benchmarks.svg" width=800 />"""
 
+# ╔═╡ ffe58516-0914-4271-b76c-52dc20185431
+YouTube("uecdcADM3hY", 8, 42)
+
+# ╔═╡ 8fd832f5-9770-4134-8409-8b20a9088600
+YouTube("xk-SIRH3sbE", 6, 43)
+
 # ╔═╡ ce2be1c0-338e-4f58-9df0-111e743f5d45
 YouTube("6JcMuFgnA6U",7,27) # High Performance in Dynamic Languages
 
@@ -256,6 +262,12 @@ md"# Matrix Multiplication | Octavian.jl
 [https://github.com/JuliaLinearAlgebra/Octavian.jl/issues/24#issuecomment-766243445](https://github.com/JuliaLinearAlgebra/Octavian.jl/issues/24#issuecomment-766243445)
 ![](https://user-images.githubusercontent.com/29157027/105636255-ca40a580-5e24-11eb-80a3-6ea280114e91.png)
 "
+
+# ╔═╡ 365c1e5c-5e34-47d2-94fc-df25876d5a03
+md"# Celeste: Julia joined the Petaflops club"
+
+# ╔═╡ 06871e27-8047-4883-a5db-7cda1007e5a1
+md"# Comrade: High-Performance Black Hole Imaging"
 
 # ╔═╡ 6ff7c81c-01f7-48ba-b261-5e1acdb7e92f
 md"# Fast Dynamic Language"
@@ -1283,6 +1295,10 @@ version = "17.4.0+2"
 # ╟─afcace32-fd86-45b2-a807-9acc06d86cda
 # ╟─f442130c-5917-4674-a025-faeb06d8124c
 # ╟─c2aedd05-7cd7-45c6-9a39-6be942971ca9
+# ╟─365c1e5c-5e34-47d2-94fc-df25876d5a03
+# ╠═ffe58516-0914-4271-b76c-52dc20185431
+# ╟─06871e27-8047-4883-a5db-7cda1007e5a1
+# ╠═8fd832f5-9770-4134-8409-8b20a9088600
 # ╟─6ff7c81c-01f7-48ba-b261-5e1acdb7e92f
 # ╠═ce2be1c0-338e-4f58-9df0-111e743f5d45
 # ╟─5380e87d-db20-47a7-91eb-83e6e02ebde5
